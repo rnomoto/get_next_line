@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/06 14:20:52 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 16:42:25 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 char *get_next_line(int fd);
 void	*ft_calloc(size_t nmemb, size_t size);
+char *double_buffer(char *old_buf, size_t size);
 int read_c(int fd);
 
 #endif

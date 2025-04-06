@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:52:59 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/06 14:34:20 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 16:39:22 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,23 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (tmp);
 }
 
+char *double_buffer(char *old_buf, size_t size)
+{
+    char *new_buf;
+    int i = 0;
+
+    new_buf = (char *)ft_calloc(sizeof(char), size * 2);
+    if (new_buf == NULL)
+        return (NULL);
+    while (i < size)
+    {
+        new_buf[i] = old_buf[i];
+        i++;
+    }
+    free(old_buf);
+    return new_buf;
+}
+
 int read_c(int fd)
 {
     char c;
@@ -45,7 +62,6 @@ int read_c(int fd)
     read_check = read(fd, &c, 1);
     if (read_check == -1 || read_check == 0)
         return -1;
-    //if (read == 0) need?? 
 
     return c;
 }
