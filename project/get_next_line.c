@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/05 19:50:16 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 15:17:39 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 
 char *get_next_line(int fd)
 {
-    static char buf[BUFSIZ];
+    char *buf;
+    char c;
     int i = 0;
-    int tmp;
     
-    char *output = (char *)ft_calloc(sizeof buf,sizeof(char));
-    if (output == NULL)
+    c = 'a'; //initiate
+    buf = (char *)ft_calloc(sizeof(char), 1000);
+    if (buf == NULL)
         return NULL;
-    while(1)
+    while (c != '\n')
     {
-        tmp = ft_getc(fd);
-        if (tmp == EOF || tmp == '\n')
+        c = read_c(fd);
+        if (c == -1 && i == 0)
+            return NULL;
+        else if (c == -1)
             break;
-        output[i] = tmp;
+        buf[i] = c;
         i++;
     }
-    return output;
+    return buf;
 }

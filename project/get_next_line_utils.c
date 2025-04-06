@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:52:59 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/05 20:42:31 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 14:34:20 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,15 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (tmp);
 }
 
-int ft_getc(int fd)
+int read_c(int fd)
 {
-    static char buf[BUFSIZ]; //how to allocate buffer
-    static int fd_store = -2;
-    static ssize_t read_size;
-    static int i = 0;
+    char c;
+    ssize_t read_check;
 
-    if (fd_store == fd)
-        i++;
-    else
-    {
-        i = 0;
-        read_size = read(fd, buf, sizeof buf); 
-        if (read_size == -1)
-            return EOF;
-        else if (read_size == 0)
-            return EOF;
-        fd_store = fd;
-    }
-    if (read_size == 0)
-        return EOF;
-    read_size --;
-    return buf[i];
+    read_check = read(fd, &c, 1);
+    if (read_check == -1 || read_check == 0)
+        return -1;
+    //if (read == 0) need?? 
+
+    return c;
 }
