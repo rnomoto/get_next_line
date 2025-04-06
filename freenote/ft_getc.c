@@ -37,15 +37,15 @@ int main(void)
     int fd;
     int c;
 
-    fd = open("hello.txt", O_RDONLY);
-    while (1)
-    {
-        c = ft_getc(fd);
-        if (c == EOF)
-            break;
-        printf("%c", c);
-    }
-    close(fd);
+    // fd = open("hello.txt", O_RDONLY);
+    // while (1)
+    // {
+    //     c = ft_getc(fd);
+    //     if (c == EOF)
+    //         break;
+    //     printf("%c", c);
+    // }
+    // close(fd);
 
     // int fd = open("hello.txt", O_RDONLY);
     // int c = ft_getc(fd);
