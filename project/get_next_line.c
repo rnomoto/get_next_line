@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/06 16:43:28 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 16:49:56 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char *get_next_line(int fd)
 {
     char *buf;
     char c;
-    int i = 0;
+    size_t i = 0;
     size_t buf_size = 10;
     
     c = 'a'; //initiate
