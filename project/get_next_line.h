@@ -6,12 +6,14 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/06 18:14:47 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/06 19:25:30 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# define BUFFER_SIZE 10
 
 # include <stdint.h>
 # include <stdlib.h>
