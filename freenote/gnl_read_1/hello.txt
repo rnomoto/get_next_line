@@ -1,6 +1,0 @@
-hello
-goodbye
-konichiwa
-sayonara
-bonjour
-au revoir
