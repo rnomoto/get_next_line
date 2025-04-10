@@ -1,23 +1,16 @@
 #include <stdio.h>
 
-void add(int num)
+void static_valuable(void)
 {
-    static int  static_num;
-    int non_static_num;
+    static char *buf;
 
-    non_static_num = 0; //static int doesn't have to initiate !?
-    static_num += num;
-    non_static_num += num;
-    printf("    static_num: %d\n", static_num);
-    printf("non_static_num: %d\n", non_static_num);
-    printf("==================\n");
+    printf("%s\n", buf);
 }
+
 
 int main(void)
 {
-    add(3);
-    add(3);
-    add(3);
+    static_valuable();
 
     return 0;
 }

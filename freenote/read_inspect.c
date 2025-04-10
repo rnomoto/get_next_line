@@ -12,9 +12,9 @@ int main(void)
         printf("allocate error.\n");
         return 1;
     }
-    
+
     size_t nbyte = 5;
-    ssize_t read_size = read(fd, buf, nbyte);
+    ssize_t read_size = read(0, buf, 1);
     if (read_size == -1)
     {
         printf("Read error.\n");
