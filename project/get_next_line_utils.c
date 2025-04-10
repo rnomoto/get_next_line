@@ -6,162 +6,136 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:52:59 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/09 14:21:13 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/10 22:11:00 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-void	*ft_calloc(size_t nmemb, size_t size)
+ssize_t	ft_strlen(const char *str)
 {
-	size_t	index;
-	size_t	count;
-	char	*tmp;
-
-	count = nmemb * size;
-	if ((size != 0 && nmemb != 0) && SIZE_MAX / nmemb < size)
-		return (NULL);
-	else if (size == 0 || nmemb == 0)
-		count = 1;
-	index = 0;
-	tmp = (char *)malloc(count);
-	if (tmp == NULL)
-		return (NULL);
-	while (index < count)
-	{
-		tmp[index] = 0;
-		index++;
-	}
-	return (tmp);
-}
-
-char	*double_buffer(char *old_buf, size_t size)
-{
-	char	*new_buf;
-	size_t	i;
-	size_t	new_size;
+	ssize_t	i;
 
 	i = 0;
-	new_size = size * 2;
-	new_buf = (char *)ft_calloc(sizeof(char), new_size + 1);
-	if (new_buf == NULL)
+	if (str == NULL)
+		return (-1);
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*add_allocate(char *mem, size_t old_size)
+{
+	char	*new_mem;
+	size_t	i;
+
+	i = 0;
+	new_mem = (char *)malloc(sizeof(char) * (old_size + BUFFER_SIZE + 1));
+	if (new_mem == NULL)
 		return (NULL);
-	while (i < size)
+	while (i < (old_size + BUFFER_SIZE) + 1)
 	{
-		new_buf[i] = old_buf[i];
+		if (mem != NULL && i < old_size)
+			new_mem[i] = mem[i];
+		else
+			new_mem[i] = '\0';
 		i++;
 	}
-	free(old_buf);
-	return (new_buf);
+	if (mem != NULL)
+		free(mem);
+	return (new_mem);
 }
 
-int	read_c(int fd)
+char	*put_store(int fd, char *ret, char *stock)
 {
-	char	c;
-	ssize_t	read_check;
-
-	read_check = read(fd, &c, 1);
-	if (read_check == -1 || read_check == 0)
-		return (-1);
-	return (c);
-}
-
-char	*put_line(char *buf, size_t size, int fd)
-{
-	char	c;
-	size_t	i;
+	static int	fd_check = -2;
+	ssize_t		i;
+	ssize_t		j;
 
 	i = 0;
-	c = 'a';
-	while (c != '\n')
+	j = 0;
+	ret = add_allocate(ret, 0);
+	if (ret == NULL)
+		return (NULL);
+	while ((fd == fd_check) && (i < ft_strlen(stock)))
 	{
-		if (i == size - 1)
+		ret[i] = stock[i];
+		if (ret[i] == '\n')
+			break ;
+		i++;
+	}
+	while ((fd == fd_check) && ((i + j) < ft_strlen(stock)))
+	{
+		stock[j] = stock[i + j];
+		j++;
+	}
+	fd_check = fd;
+	return (ret);
+}
+
+int	put_buf(char *ret, char *stock, char *read_buf, ssize_t read_size)
+{
+	ssize_t	i;
+	ssize_t	j;
+	int		flag;
+
+	i = 0;
+	j = 0;
+	flag = 1;
+    //printf("hey\n");
+	while (ret[i] != '\0')
+		i++;
+	while (j < read_size)
+	{
+		ret[i] = read_buf[j];
+        //printf("debug: %c", read_buf[j]);
+		j++;
+		if (ret[i] == '\n' || ret[i] == '\0')
 		{
-			buf = double_buffer(buf, size);
-			if (buf == NULL)
-				return (NULL);
-			size *= 2;
+			flag = 0;
+			break ;
 		}
-		c = read_c(fd);
-		if (c == -1 && i == 0)
+		i++;
+	}
+	i = 0;
+	while (i + j < read_size)
+	{
+		stock[i] = read_buf[i + j];
+		i++;
+	}
+	if (i + j == read_size)
+		stock[i] = '\0';
+	return (flag);
+}
+
+char	*find_enter(int fd, char *ret, char *stock)
+{
+	char	*read_buf;
+	ssize_t	read_size;
+	size_t	count;
+
+	count = 1;
+	read_buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (read_buf == NULL)
+		return (NULL);
+	read_buf[BUFFER_SIZE] = '\0';
+	while (1)
+	{
+		read_size = read(fd, read_buf, BUFFER_SIZE);
+		ret = add_allocate(ret, BUFFER_SIZE * count);
+        //printf("debug: %zd\n", read_size);
+		if (read_size <= 0 || ret == NULL)
 		{
-			free(buf);
+			free(read_buf);
+			if (ret)
+				free(ret);
 			return (NULL);
 		}
-		else if (c == -1)
+		if (put_buf(ret, stock, read_buf, read_size) == 0)
 			break ;
-		buf[i] = c;
-		i++;
+		count++;
 	}
-	return (buf);
-}
-
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
-{
-	size_t	dest_len;
-	size_t	src_len;
-	size_t	i;
-
-	if (size == 0 && dest == NULL)
-		dest_len = 0;
-	else
-		dest_len = ft_strlen(dest);
-	src_len = ft_strlen(src);
-	i = 0;
-	if (size <= dest_len)
-		return (src_len + size);
-	else
-	{
-		while (dest[i] != '\0')
-			i++;
-		while (i + 1 < size && *src)
-		{
-			dest[i] = *src;
-			i++;
-			src++;
-		}
-		dest[i] = '\0';
-	}
-	return (dest_len + src_len);
-}
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	index;
-
-	index = 0;
-	while (str[index] != '\0')
-		index++;
-	return (index);
-}
-
-void	*ft_memset(void *str, int c, size_t n)
-{
-	size_t			index;
-	unsigned char	*str_cast;
-	unsigned char	c_cast;
-
-	index = 0;
-	str_cast = (unsigned char *)str;
-	c_cast = (unsigned char)c;
-	while (index < n)
-	{
-		str_cast[index] = c_cast;
-		index++;
-	}
-	return (str_cast);
-}
-
-void	ft_bzero(void *str, size_t n)
-{
-	size_t			index;
-	unsigned char	*str_cast;
-
-	index = 0;
-	str_cast = (unsigned char *)str;
-	while (index < n)
-	{
-		str_cast[index] = 0;
-		index++;
-	}
+	free(read_buf);
+	return (ret);
 }

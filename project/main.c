@@ -5,6 +5,7 @@
 int main(void)
 {
     int fd = open("hello.txt", O_RDONLY);
+    //fd = 0;
     char *line = get_next_line(fd);
     printf("%s", line);
     printf("---------------\n");
@@ -44,7 +45,7 @@ int main(void)
     printf("%s", line);
     printf("---------------\n");
     free (line);
-    
+
     line = get_next_line(fd);
     printf("%s", line);
     printf("---------------\n");
@@ -71,4 +72,5 @@ int main(void)
     free (line);
 
     close(fd);
+    return 0;
 }
