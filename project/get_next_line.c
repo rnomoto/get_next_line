@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/11 15:07:30 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/11 15:41:59 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char *put_read(int fd, char *ret, char *stock)
 		if (read_size <= 0 && count == 1)
 		{
 			free(read_buf);
+			free(ret);
 			return NULL;
 		}
 		else if (read_size == 0 && count != 1)
@@ -137,18 +138,26 @@ char	*get_next_line(int fd)
 	//printf("ret: \"%s\"\n", ret);
 	//ret = NULL;
 	if (ret == NULL)
+	{
+		free(flag);
 		return (NULL);
+	}
 	//printf("flag: %d\n", *flag);
 	if (*flag == 1)
+	{
+		free(flag);
 		return (ret);
+	}
 	
 	ret = put_read(fd, ret, stock);
 	//printf("ret: \"%s\"\n", ret);
 	//ret = NULL;
 	if (ret == NULL)
 	{
+		free(flag);
 		free(ret);
 		return (NULL);
 	}
+	free(flag);
 	return (ret);
 }
