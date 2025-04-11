@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/11 16:43:04 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:02:41 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ char *put_stock(int fd, char *stock, int *flag)
 	return ret;
 }
 
+
+//split?
 char *put_read(int fd, char *ret, char *stock)
 {
 	char *read_buf;
@@ -72,18 +74,25 @@ char *put_read(int fd, char *ret, char *stock)
 	{
 		j = 0;
 		read_size = read(fd, read_buf, BUFFER_SIZE);
-
-		if (read_size <= 0 && count == 1)
+		if (read_size <= 0)
 		{
 			free(read_buf);
-			free(ret);
+			if (read_size == 0 && count != 1)
+				return ret;
+			free(ret); //else if(read_size <= 0 && count == 1)
 			return NULL;
 		}
-		else if (read_size == 0 && count != 1)
-		{
-			free(read_buf);
-			return ret;
-		}
+		// if (read_size <= 0 && count == 1)
+		// {
+		// 	free(read_buf);
+		// 	free(ret);
+		// 	return NULL;
+		// }
+		// else if (read_size == 0 && count != 1)
+		// {
+		// 	free(read_buf);
+		// 	return ret;
+		// }
 		ret = strdup_double(ret, ((BUFFER_SIZE + 1) * count));
 		char *tmp = ret; //for free if allcate occurs error
 		//ret = NULL;
@@ -93,21 +102,21 @@ char *put_read(int fd, char *ret, char *stock)
 			free(read_buf);
 			return NULL;
 		}
-		while (j < read_size)
+		while ((j + k) < read_size)
 		{
 			if (ret[i] != '\0')
 				i++;
-			else
+			else if (read_buf[j] != '\n')
 			{
 				ret[i] = read_buf[j];
-				while (ret[i] == '\n' && j < read_size)
-				{
-					j++;
-					stock[k] = read_buf[j];
-					k++;
-				}
-				i++;
 				j++;
+			}
+			else
+			{
+				if (k == 0)
+					ret[i] = read_buf[j];
+				stock[k] = read_buf[j + k];
+				k++;
 			}
 		}
 		if (k != 0)
