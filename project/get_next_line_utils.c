@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:52:59 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/11 16:25:55 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/11 21:54:21 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ char *strdup_double(char *mem, size_t old_size)
 	size_t i;
 
 	i = 0;
-	new_mem = (char *)malloc(sizeof(char) * (old_size * 2));
+	if (old_size == 0)
+		new_mem = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	else
+		new_mem = (char *)malloc(sizeof(char) * (old_size * 2));
 	if (new_mem == NULL)
 	{
 		free(mem);
