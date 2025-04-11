@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/11 16:27:35 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:43:04 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,22 @@ char *put_read(int fd, char *ret, char *stock)
 			free(read_buf);
 			return NULL;
 		}
-		while (ret[i] != '\0')
-			i++;
 		while (j < read_size)
 		{
-			ret[i] = read_buf[j];
-			while (ret[i] == '\n' && j < read_size)
+			if (ret[i] != '\0')
+				i++;
+			else
 			{
+				ret[i] = read_buf[j];
+				while (ret[i] == '\n' && j < read_size)
+				{
+					j++;
+					stock[k] = read_buf[j];
+					k++;
+				}
+				i++;
 				j++;
-				stock[k] = read_buf[j];
-				k++;
 			}
-			i++;
-			j++;
 		}
 		if (k != 0)
 		{
