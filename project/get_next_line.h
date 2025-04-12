@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/11 14:24:16 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/12 18:57:43 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,16 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
+char *put_stock(int fd, char *stock, char *ret);
+ssize_t read_buf(int fd, char *buf, char **ret_p);
+int put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size);
+char *read_put(int fd, char *ret, char *stock);
+
 size_t	ft_strlen(const char *str);
+ssize_t	find_char(const char *str, int c);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 void	*ft_memset(void *mem, int c, size_t n);
 char *strdup_double(char *mem, size_t old_size);
-char *put_stock(int fd, char *stock, int *flag);
-char *put_read(int fd, char *ret, char *stock);
 
-
-
-// char	*add_allocate(char *mem, size_t old_size);
-// char	*put_store(int fd, char *ret, char *stock);
-// char *find_enter(int fd, char *ret, char *stock);
-// int put_buf(char *ret, char *stock, char *read_buf, ssize_t read_size);
 
 #endif
