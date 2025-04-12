@@ -6,45 +6,18 @@
 int main(void)
 {
     int fd = open("hello.txt", O_RDONLY);
-    char *buf = (char *)malloc(sizeof(char) * 10);
-    if (buf == NULL)
-    {
-        printf("allocate error.\n");
-        return 1;
-    }
 
-    size_t nbyte = 5;
-    ssize_t read_size = read(0, buf, 1);
-    if (read_size == -1)
-    {
-        printf("Read error.\n");
-        return 1;
-    }
-    printf("%s\n", buf);
-    printf("read_size: %zu\n", read_size);
+    char *read_buf = (char *)calloc(sizeof(char), 6);
+    ssize_t read_size = read(fd, read_buf, 5);
+    printf("read_size: %zd\n", read_size);
+    printf("read_buf: %s\n", read_buf);
+    read_size = read(fd, read_buf, 5);
+    printf("read_size: %zd\n", read_size);
+    printf("read_buf: %s\n", read_buf);
+    read_size = read(fd, read_buf, 5);
+    printf("read_size: %zd\n", read_size);
+    printf("read_buf: %s\n", read_buf);
 
-    // read_size = read(fd, buf, nbyte);
-    // if (read_size == -1)
-    // {
-    //     printf("Read error.\n");
-    //     return 1;
-    // }
-    // printf("%s\n", buf);
-    // printf("read_size: %zu\n", read_size);
-
-    // read_size = read(fd, buf, nbyte);
-    // if (read_size == -1)
-    // {
-    //     printf("Read error.\n");
-    //     return 1;
-    // }
-    // printf("%s\n", buf);
-    // printf("read_size: %zu\n", read_size);
-
-    if (close(fd == -1))
-    {
-        printf("Close error.\n");
-        return 1;
-    }
+    close(fd);
     return 0;
 }
