@@ -6,12 +6,12 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:34:07 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:48:49 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h> //for debugging
+#include <stdio.h> //for debug
 
 char	*put_stock(int fd, char *stock, char *ret)
 {
@@ -24,13 +24,13 @@ char	*put_stock(int fd, char *stock, char *ret)
 		return (NULL);
 	if (fd == fd_check)
 	{
+		printf("stock: \"%s\"\n", stock);
 		ft_strlcpy(tmp, stock, (ft_strlen(stock) + 1));
 		enter_pos = find_char(stock, '\n');
 		if (enter_pos != -1)
 		{
 			ft_strlcpy(ret, tmp, (enter_pos + 2));
-			ft_strlcpy(stock, (tmp + enter_pos + 1), ft_strlen(tmp + enter_pos
-					+ 1) + 1);
+			ft_strlcpy(stock, (tmp + enter_pos + 1), ft_strlen(tmp + enter_pos + 1) + 1);
 			free(tmp);
 			return (ret);
 		}
@@ -71,6 +71,7 @@ int	put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size)
 	ssize_t	enter_pos;
 
 	enter_pos = find_char(buf, '\n');
+	printf("buf: \"%s\"\n", buf);
 	if (read_size == -1)
 		return (-1);
 	if (enter_pos == -1 && read_size == BUFFER_SIZE)
@@ -78,14 +79,13 @@ int	put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size)
 	else
 	{
 		if (enter_pos == -1)
-			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (read_size + 1));
-				//+1?
+			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (read_size + 1)); //+1?
 		else
 		{
 			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (enter_pos + 2));
-			if (read_size == BUFFER_SIZE)
-				ft_strlcpy(stock, (buf + enter_pos + 1), (read_size
-						- enter_pos));
+			printf("ret: \"%s\"\n", *ret_p);
+			//if (read_size == BUFFER_SIZE)
+			ft_strlcpy(stock, (buf + enter_pos + 1), (read_size - enter_pos));
 		}
 		return (0);
 	}
