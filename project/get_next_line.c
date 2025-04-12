@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:50:30 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:58:41 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,15 @@ char	*put_stock(int fd, char *stock, char *ret)
 		return (NULL);
 	if (fd == fd_check)
 	{
-		//printf("stock: \"%s\"\n", stock);
+		// printf("stock: \"%s\"\n", stock);
 		ft_strlcpy(tmp, stock, (ft_strlen(stock) + 1));
+		// printf("tmp: \"%s\"\n", tmp);
 		enter_pos = find_char(stock, '\n');
+		// printf("enter_pos: %zd\n", enter_pos);
 		if (enter_pos != -1)
 		{
 			ft_strlcpy(ret, tmp, (enter_pos + 2));
+			// printf("ret: \"%s\"", ret);
 			ft_strlcpy(stock, (tmp + enter_pos + 1), ft_strlen(tmp + enter_pos + 1) + 1);
 			free(tmp);
 			return (ret);
@@ -138,6 +141,8 @@ char	*get_next_line(int fd)
 	ft_memset(ret, '\0', (BUFFER_SIZE + 1));
 	tmp = ret;
 	ret = put_stock(fd, stock, ret); // null ok
+	if (find_char(ret, '\n') != -1)
+		return ret;
 	if (ret == NULL)
 	{
 		free(tmp);
