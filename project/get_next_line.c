@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:48:49 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/12 20:50:30 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*put_stock(int fd, char *stock, char *ret)
 		return (NULL);
 	if (fd == fd_check)
 	{
-		printf("stock: \"%s\"\n", stock);
+		//printf("stock: \"%s\"\n", stock);
 		ft_strlcpy(tmp, stock, (ft_strlen(stock) + 1));
 		enter_pos = find_char(stock, '\n');
 		if (enter_pos != -1)
@@ -71,7 +71,7 @@ int	put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size)
 	ssize_t	enter_pos;
 
 	enter_pos = find_char(buf, '\n');
-	printf("buf: \"%s\"\n", buf);
+	//printf("buf: \"%s\"\n", buf);
 	if (read_size == -1)
 		return (-1);
 	if (enter_pos == -1 && read_size == BUFFER_SIZE)
@@ -83,7 +83,7 @@ int	put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size)
 		else
 		{
 			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (enter_pos + 2));
-			printf("ret: \"%s\"\n", *ret_p);
+			//printf("ret: \"%s\"\n", *ret_p);
 			//if (read_size == BUFFER_SIZE)
 			ft_strlcpy(stock, (buf + enter_pos + 1), (read_size - enter_pos));
 		}
