@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/13 10:10:23 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 11:07:40 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size)
 {
 	ssize_t	read_size;
 
-	// char *tmp_free;
+	//char *tmp_free;
 	read_size = read(fd, buf, BUFFER_SIZE);
 	//printf("read_size: %zd\n", read_size);
 	if (read_size == 0 && buf[0] != '\0')
@@ -60,12 +60,12 @@ ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size)
 		return (-1);
 	if ((ft_strlen(*ret_p) + (size_t)read_size + 1) > *ret_size)
 	{
-		// tmp_free = *ret_p;
+		//tmp_free = *ret_p;
 		*ret_p = strdup_double(*ret_p, ret_size); // null ok. maybe tmp_free is not necessary
 		//*ret_p = NULL;
+		//free(tmp_free);
 		if (*ret_p == NULL)
 		{
-			// free(tmp_free);
 			return (-1);
 		}
 	}
@@ -105,6 +105,7 @@ char	*read_put(int fd, char *ret, char *stock)
 	size_t	*ret_size;
 	int		put_check;
 	char	**ret_p;
+	//char *tmp;
 
 	ret_p = &ret;
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1)); // null ok
@@ -118,6 +119,7 @@ char	*read_put(int fd, char *ret, char *stock)
 	}
 	*ret_size = ft_strlen(stock) + 1;
 	ft_memset(buf, '\0', (BUFFER_SIZE + 1));
+	//tmp = *ret_p;
 	while (1)
 	{
 		read_size = read_buf(fd, buf, ret_p, ret_size);
@@ -125,9 +127,11 @@ char	*read_put(int fd, char *ret, char *stock)
 		if (put_check <= 0)
 			break ;
 	}
+	//if (*ret_p != tmp)
+		//free(tmp);
 	free(buf);
 	free(ret_size);
-	if (read_size == 0 || put_check == 0)
+	if (read_size == 0 || put_check == 0)	
 		return (ret);
 	return (NULL);
 }
@@ -157,7 +161,7 @@ char	*get_next_line(int fd)
 		return ret;
 	}
 	// if (ret != tmp)
-    	// free(tmp);
+    // 	free(tmp);
 	tmp = ret; // for free previous ret if new_ret == NULL
 	ret = read_put(fd, ret, stock); // null ok
 	//ret = NULL;
@@ -166,6 +170,6 @@ char	*get_next_line(int fd)
 		free(tmp);
 		return (NULL);
 	}
-	free(tmp);
+	//free(tmp);
 	return (ret);
 }
