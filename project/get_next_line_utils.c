@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:52:59 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:36:01 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 09:40:21 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,19 @@ void	*ft_memset(void *mem, int c, size_t n)
 char	*strdup_double(char *mem, size_t *old_size)
 {
 	char	*new_mem;
+	size_t new_size;
 
-	new_mem = (char *)malloc(sizeof(char) * (*old_size * 2));
+	//new_mem = (char *)malloc(sizeof(char) * (*old_size * 2));
+	new_size = *old_size + BUFFER_SIZE;
+	new_mem = (char *)malloc(sizeof(char) * new_size);
 	if (new_mem == NULL)
 	{
-		free(mem);
+		//free(mem);
 		return (NULL);
 	}
-	ft_memset(new_mem, '\0', (*old_size * 2));
+	ft_memset(new_mem, '\0', new_size);
 	ft_strlcpy(new_mem, mem, ft_strlen(mem) + 1);
-	*old_size *= 2;
-	free(mem);
+	*old_size = new_size;
+	//free(mem);
 	return (new_mem);
 }

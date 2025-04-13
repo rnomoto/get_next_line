@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:58:41 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 09:58:51 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 
 char	*put_stock(int fd, char *stock, char *ret)
 {
-	static int	fd_check = -2;
+	static int	fd_check = -2; //is it ok to define -2 to fd_check?
 	ssize_t		enter_pos;
 	char		*tmp;
 
 	tmp = (char *)malloc(sizeof(char) * (ft_strlen(stock) + 1)); // null ok
+	//tmp = NULL;
 	if (tmp == NULL)
 		return (NULL);
-	if (fd == fd_check)
+	//printf("fd: %d\n",fd);
+	if (fd == fd_check && fd_check != -2)
 	{
 		// printf("stock: \"%s\"\n", stock);
 		ft_strlcpy(tmp, stock, (ft_strlen(stock) + 1));
@@ -51,6 +53,7 @@ ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size)
 
 	// char *tmp_free;
 	read_size = read(fd, buf, BUFFER_SIZE);
+	//printf("read_size: %zd\n", read_size);
 	if (read_size == 0 && buf[0] != '\0')
 		return (0);
 	else if (read_size <= 0)
@@ -113,7 +116,7 @@ char	*read_put(int fd, char *ret, char *stock)
 		free(buf);
 		return (NULL);
 	}
-	*ret_size = BUFFER_SIZE + 1;
+	*ret_size = ft_strlen(stock) + 1;
 	ft_memset(buf, '\0', (BUFFER_SIZE + 1));
 	while (1)
 	{
@@ -131,25 +134,33 @@ char	*read_put(int fd, char *ret, char *stock)
 
 char	*get_next_line(int fd)
 {
-	static char	stock[BUFFER_SIZE + 1];
+	static char	stock[BUFFER_SIZE];
 	char		*ret;
 	char		*tmp;
 
-	ret = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1)); // null ok
+	ret = (char *)malloc(sizeof(char) * (ft_strlen(stock) + 1));
+	//ret = NULL;
 	if (ret == NULL)
 		return (NULL);
-	ft_memset(ret, '\0', (BUFFER_SIZE + 1));
+	ft_memset(ret, '\0', (ft_strlen(stock) + 1));
 	tmp = ret;
-	ret = put_stock(fd, stock, ret); // null ok
-	if (find_char(ret, '\n') != -1)
-		return ret;
+	ret = put_stock(fd, stock, ret);
+	//ret = NULL;
 	if (ret == NULL)
 	{
 		free(tmp);
 		return (NULL);
 	}
-	tmp = ret;                      // for free previous ret if new_ret == NULL
+	if (find_char(ret, '\n') != -1)
+	{
+		//free(tmp);
+		return ret;
+	}
+	if (ret != tmp)
+    	free(tmp);
+	tmp = ret; // for free previous ret if new_ret == NULL
 	ret = read_put(fd, ret, stock); // null ok
+	//ret = NULL;
 	if (ret == NULL)
 	{
 		free(tmp);
