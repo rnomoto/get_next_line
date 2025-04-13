@@ -5,12 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/13 11:29:52 by rnomoto          ###   ########.fr       */
-=======
-/*   Updated: 2025/04/13 11:37:59 by rnomoto          ###   ########.fr       */
->>>>>>> 690434c (leaks)
+/*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
+/*   Updated: 2025/04/13 11:49:51 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +167,7 @@ char	*get_next_line(int fd)
 	//ret = NULL;
 	if (ret == NULL)
 	{
-<<<<<<< HEAD
-        free(tmp);
-=======
 		free(tmp);
->>>>>>> 690434c (leaks)
 		return (NULL);
 	}
 	free(tmp);
