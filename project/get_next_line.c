@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/13 11:13:00 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 11:29:52 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	*read_put(int fd, char *ret, char *stock)
 		//free(tmp);
 	free(buf);
 	free(ret_size);
-	if (read_size == 0 || put_check == 0)	
+	if (read_size == 0 || put_check == 0)
 		return (ret);
 	return (NULL);
 }
@@ -167,9 +167,9 @@ char	*get_next_line(int fd)
 	//ret = NULL;
 	if (ret == NULL)
 	{
-		//free(tmp);
+        free(tmp);
 		return (NULL);
 	}
-	//free(tmp);
+	free(tmp);
 	return (ret);
 }
