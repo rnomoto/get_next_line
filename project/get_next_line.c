@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:08 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/13 11:07:40 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 11:11:40 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ char	*get_next_line(int fd)
 	//ret = NULL;
 	if (ret == NULL)
 	{
-		free(tmp);
+		//free(tmp);
 		return (NULL);
 	}
 	//free(tmp);
