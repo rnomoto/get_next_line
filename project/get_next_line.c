@@ -6,172 +6,177 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/13 12:13:58 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:03:00 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //for debug
 
-char	*put_stock(int fd, char *stock, char *ret)
+char	*put_stock(int fd, char *stock, char *mem, int *err_flag)
 {
 	static int	fd_check = -2; //is it ok to define -2 to fd_check?
-	ssize_t		enter_pos;
-	char		*tmp;
+	ssize_t		nl_pos;
+	char *cp;
 
-	tmp = (char *)malloc(sizeof(char) * (ft_strlen(stock) + 1)); // null ok
-	//tmp = NULL;
-	if (tmp == NULL)
-		return (NULL);
-	//printf("fd: %d\n",fd);
-	if (fd == fd_check && fd_check != -2)
+	if (*err_flag == 1)
 	{
-		// printf("stock: \"%s\"\n", stock);
-		ft_strlcpy(tmp, stock, (ft_strlen(stock) + 1));
-		// printf("tmp: \"%s\"\n", tmp);
-		enter_pos = find_char(stock, '\n');
-		// printf("enter_pos: %zd\n", enter_pos);
-		if (enter_pos != -1)
-		{
-			ft_strlcpy(ret, tmp, (enter_pos + 2));
-			// printf("ret: \"%s\"", ret);
-			ft_strlcpy(stock, (tmp + enter_pos + 1), ft_strlen(tmp + enter_pos + 1) + 1);
-			free(tmp);
-			return (ret);
-		}
-		ft_strlcpy(ret, tmp, (ft_strlen(stock) + 1));
+		ft_memset(stock, '\0', BUFFER_SIZE + 1);
+		fd_check = -2;
+		*err_flag = 0;
 	}
-	ft_memset(stock, '\0', ft_strlen(stock) + 1);
+	//printf("stock: \"%s\"\n", stock);
+	if (fd != fd_check || fd_check == -2)
+		ft_memset(stock, '\0', BUFFER_SIZE + 1);
+	cp = (char *)malloc(sizeof(char) * ft_strlen(stock) + 1);
+	//ret = NULL
+	if (cp == NULL)
+		return NULL;
+	ft_strlcpy(cp, stock, ft_strlen(stock) + 1);
+	//printf("cp: \"%s\"\n", cp);
+	mem = (char *)malloc(sizeof(char) * (ft_strlen(stock) + 1));
+	//ret = NULL;
+	if (mem == NULL)
+	{
+		free(cp);
+		return NULL;
+	}
+	ft_strlcpy(mem, stock, ft_strlen(stock) + 1);
+	nl_pos = find_char(stock, '\n');
+	if (nl_pos != -1)
+	{
+		ft_strlcpy(mem, cp, (nl_pos + 1) + 1);
+		ft_strlcpy(stock, (cp + nl_pos + 1), ft_strlen(cp + nl_pos + 1) + 1);
+		free(cp);
+		return mem;
+	}
+	ft_strlcpy(mem, cp, ft_strlen(cp) + 1);
 	fd_check = fd;
-	free(tmp);
-	return (ret);
+	free(cp);
+	//printf("mem: \"%s\"\n", mem);
+	return mem;
 }
 
-ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size)
+ssize_t read_buf(int fd, char *buf, char **mem_p, size_t *mem_size)
 {
-	ssize_t	read_size;
+	ssize_t read_size;
 
-	char *tmp_free;
 	read_size = read(fd, buf, BUFFER_SIZE);
 	//printf("read_size: %zd\n", read_size);
-	tmp_free = *ret_p;
-	if (read_size == 0 && buf[0] != '\0')
-		return (0);
+	if (read_size == 0 && (buf[0] != '\0' || *mem_p[0] != '\0'))
+		return 0;
 	else if (read_size <= 0)
-		return (-1);
-	if ((ft_strlen(*ret_p) + (size_t)read_size + 1) > *ret_size)
+		return -1;
+	if ((ft_strlen(*mem_p) + (size_t)read_size + 1) > *mem_size)
 	{
-		*ret_p = strdup_double(*ret_p, ret_size); // null ok. maybe tmp_free is not necessary
-		//*ret_p = NULL;
-		free(tmp_free);
-		if (*ret_p == NULL)
-		{
-			return (-1);
-		}
+		*mem_p = strdup_double(*mem_p, mem_size);
+		if (*mem_p == NULL)
+			return -1;
 	}
-	//if (tmp_free != *ret_p)
-		//free(tmp_free);
-	return (read_size);
+	return read_size;
 }
 
-int	put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size)
+int put_buf(char **mem_p, char *buf, char *stock, ssize_t read_size)
 {
-	ssize_t	enter_pos;
+	ssize_t nl_pos;
 
-	enter_pos = find_char(buf, '\n');
-	//printf("buf: \"%s\"\n", buf);
 	if (read_size == -1)
-		return (-1);
-	if (enter_pos == -1 && read_size == BUFFER_SIZE)
-		ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (read_size + 1)); //+1?
+		return -1;
+	ft_memset(stock, '\0', BUFFER_SIZE + 1); //initialize stock before putting a read_buf
+	nl_pos = find_char(buf, '\n');
+	if (nl_pos == -1 && read_size == BUFFER_SIZE)
+	{
+		ft_strlcpy(*mem_p + ft_strlen(*mem_p), buf, read_size + 1);
+		return 1;
+	}
+	else if (nl_pos == -1)
+		ft_strlcpy(*mem_p + ft_strlen(*mem_p), buf, (read_size + 1)); //+1?
 	else
 	{
-		if (enter_pos == -1)
-			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (read_size + 1)); //+1?
-		else
-		{
-			ft_strlcpy((*ret_p + ft_strlen(*ret_p)), buf, (enter_pos + 2));
-			//printf("ret: \"%s\"\n", *ret_p);
-			//if (read_size == BUFFER_SIZE)
-			ft_strlcpy(stock, (buf + enter_pos + 1), (read_size - enter_pos));
-		}
-		return (0);
+		ft_strlcpy(*mem_p + ft_strlen(*mem_p), buf, (nl_pos + 1) + 1);
+		ft_strlcpy(stock, buf + nl_pos + 1, read_size - nl_pos);
 	}
-	return (1);
+	return 0;
 }
 
-char	*read_put(int fd, char *ret, char *stock)
+//use tmp??
+//use ret_p = &ret?
+char *read_put(int fd, char *mem, char *stock, int *err_flag)
 {
-	char	*buf;
-	ssize_t	read_size;
-	size_t	*ret_size;
-	int		put_check;
-	char	**ret_p;
-	//char *tmp;
+	char *buf;
+	ssize_t read_size;
+	size_t mem_size;
+	int put_check;
 
-	ret_p = &ret;
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1)); // null ok
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	// buf = NULL;
 	if (buf == NULL)
-		return (NULL);
-	ret_size = (size_t *)malloc(sizeof(size_t)); // null ok
-	if (ret_size == NULL)
 	{
-		free(buf);
-		return (NULL);
+		free(mem);
+		return NULL;
 	}
-	*ret_size = ft_strlen(stock) + 1;
 	ft_memset(buf, '\0', (BUFFER_SIZE + 1));
-	//tmp = *ret_p;
+	mem_size = ft_strlen(stock) + 1;
 	while (1)
 	{
-		read_size = read_buf(fd, buf, ret_p, ret_size);
-		put_check = put_buf(ret_p, buf, stock, read_size);
+		read_size = read_buf(fd, buf, &mem, &mem_size);
+		put_check = put_buf(&mem, buf, stock, read_size);
 		if (put_check <= 0)
 			break ;
 	}
-	//if (*ret_p != tmp)
-		//free(tmp);
-	free(buf);
-	free(ret_size);
 	if (read_size == 0 || put_check == 0)
-		return (ret);
+	{
+		if (buf[0] =='\0')
+			ft_memset(stock, '\0', (BUFFER_SIZE + 1));
+		free(buf);
+		return (mem);
+	}
+	*err_flag = 1;
+	free(mem);
+	free(buf);
 	return (NULL);
 }
 
-char	*get_next_line(int fd)
+//free later. put inside a helper func
+//use tmp?
+char *get_next_line(int fd)
 {
-	static char	stock[BUFFER_SIZE];
-	char		*ret;
-	char		*tmp;
+	static char stock[BUFFER_SIZE + 1];
+	//char **ret_p;
+	char *mem;
+	char *ret;
 
-	ret = (char *)malloc(sizeof(char) * (ft_strlen(stock) + 1));
-	//ret = NULL;
-	if (ret == NULL)
-		return (NULL);
-	ft_memset(ret, '\0', (ft_strlen(stock) + 1));
-	tmp = ret;
-	ret = put_stock(fd, stock, ret);
-	//ret = NULL;
-	if (ret == NULL)
+	static int err_flag = 0;
+
+	//ret_p = &ret;
+	mem = NULL;
+	mem = put_stock(fd, stock, mem, &err_flag);
+	if (mem == NULL)
+		return NULL;
+	else if (find_char(mem, '\n') != -1)
 	{
-		free(tmp);
-		return (NULL);
-	}
-	if (find_char(ret, '\n') != -1)
-	{
-		//free(tmp);
+		ret = (char *)malloc(sizeof(char) * (ft_strlen(mem) + 1));
+		if (ret == NULL)
+		{
+			free(mem);
+			return NULL;
+		}
+		ft_memset(ret, '\0', ft_strlen(mem) + 1);
+		ft_strlcpy(ret, mem, ft_strlen(mem) + 1);
+		free(mem);
 		return ret;
 	}
-	// if (ret != tmp)
-    // 	free(tmp);
-	tmp = ret; // for free previous ret if new_ret == NULL
-	ret = read_put(fd, ret, stock); // null ok
-	//ret = NULL;
+	mem = read_put(fd, mem, stock, &err_flag);
+	if (mem == NULL)
+		return NULL;
+	ret = (char *)malloc(sizeof(char) * (ft_strlen(mem) + 1));
 	if (ret == NULL)
 	{
-		//free(tmp);
-		return (NULL);
+		free(mem);
+		return NULL;
 	}
-	//free(tmp);
-	return (ret);
+	ft_memset(ret, '\0', ft_strlen(mem) + 1);
+	ft_strlcpy(ret, mem, ft_strlen(mem) + 1);
+	free(mem);
+	return ret;
 }

@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/12 20:18:22 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:51:53 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*put_stock(int fd, char *stock, char *ret);
-char	*read_put(int fd, char *ret, char *stock);
-ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size);
-int		put_buf(char **ret_p, char *buf, char *stock, ssize_t read_size);
+//char	*put_stock(int fd, char *stock, char *mem);
+char	*put_stock(int fd, char *stock, char *mem, int *err_flag);
+//char *read_put(int fd, char *mem, char *stock);
+char *read_put(int fd, char *mem, char *stock, int *err_flag);
+ssize_t read_buf(int fd, char *buf, char **mem_p, size_t *mem_size);
+int put_buf(char **mem_p, char *buf, char *stock, ssize_t read_size);
 
 size_t	ft_strlen(const char *str);
 ssize_t	find_char(const char *str, int c);
