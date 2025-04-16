@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/13 11:49:51 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/13 12:13:58 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,26 @@ ssize_t	read_buf(int fd, char *buf, char **ret_p, size_t *ret_size)
 {
 	ssize_t	read_size;
 
-	//char *tmp_free;
+	char *tmp_free;
 	read_size = read(fd, buf, BUFFER_SIZE);
 	//printf("read_size: %zd\n", read_size);
+	tmp_free = *ret_p;
 	if (read_size == 0 && buf[0] != '\0')
 		return (0);
 	else if (read_size <= 0)
 		return (-1);
 	if ((ft_strlen(*ret_p) + (size_t)read_size + 1) > *ret_size)
 	{
-		//tmp_free = *ret_p;
 		*ret_p = strdup_double(*ret_p, ret_size); // null ok. maybe tmp_free is not necessary
 		//*ret_p = NULL;
-		//free(tmp_free);
+		free(tmp_free);
 		if (*ret_p == NULL)
 		{
 			return (-1);
 		}
 	}
+	//if (tmp_free != *ret_p)
+		//free(tmp_free);
 	return (read_size);
 }
 
@@ -167,9 +169,9 @@ char	*get_next_line(int fd)
 	//ret = NULL;
 	if (ret == NULL)
 	{
-		free(tmp);
+		//free(tmp);
 		return (NULL);
 	}
-	free(tmp);
+	//free(tmp);
 	return (ret);
 }

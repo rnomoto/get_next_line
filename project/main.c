@@ -16,60 +16,62 @@ int main(void)
     printf("---------------\n");
     free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free(line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free(line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free(line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free(line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
 
-    line = get_next_line(fd);
-    printf("%s", line);
-    printf("---------------\n");
-    free (line);
+    // line = get_next_line(fd);
+    // printf("%s", line);
+    // printf("---------------\n");
+    // free (line);
+
+    system("leaks a.out");
 
     close(fd);
     return 0;
