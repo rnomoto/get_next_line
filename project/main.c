@@ -3,26 +3,26 @@
 #include <stdio.h>
 
 
-//ccw -D BUFFER_SIZE=1
-//ccw -D BUFFER_SIZE=10
-//ccw -D BUFFER_SIZE=9999
-//ccw -D BUFFER_SIZE=1000000
-//ccw -D BUFFER_SIZE=0
-//ccw -D BUFFER_SIZE=-1
-//ccw -D BUFFER_SIZE=999999999
+// ccw -D BUFFER_SIZE=1
+// ccw -D BUFFER_SIZE=10
+// ccw -D BUFFER_SIZE=9999
+// ccw -D BUFFER_SIZE=1000000
+// ccw -D BUFFER_SIZE=0
+// ccw -D BUFFER_SIZE=-1
+// ccw -D BUFFER_SIZE=999999999
 
-//single_char.txt
-//single_line.txt
-//multiple_line.txt
-//empty.txt
-//single_nl.txt
-//multiple_nl.txt
-//long_line.txt
-//long_multiple_line.txt
+// input/single_char.txt
+// input/single_line.txt
+// input/multiple_line.txt
+// input/empty.txt
+// input/single_nl.txt
+// input/multiple_nl.txt
+// input/long_line.txt
+// input/long_multiple_line.txt
 
 int main(void)
 {
-    int fd = open("hello.txt", O_RDONLY);
+    int fd = open("input/hello.txt", O_RDONLY);
     //fd = 0;
     char *line = get_next_line(fd);
     printf("%s", line);

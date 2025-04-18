@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:06 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/16 13:22:20 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:09:18 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (check);
 }
 
-// if mem == NULL? impossible
 void	*ft_memset(void *mem, int c, size_t n)
 {
 	size_t			i;
@@ -76,21 +75,20 @@ void	*ft_memset(void *mem, int c, size_t n)
 	return (mem_cast);
 }
 
-char	*strdup_double(char *mem, size_t *old_size)
+char	*alloc_cpy(char *mem, size_t size)
 {
-	char	*new_mem;
-	size_t new_size;
+	char	*ret;
 
-	new_size = (*old_size * 2) + BUFFER_SIZE;
-	new_mem = (char *)malloc(sizeof(char) * new_size);
-	if (new_mem == NULL)
+	ret = (char *)malloc(sizeof(char) * size);
+	if (ret == NULL)
 	{
 		free(mem);
 		return (NULL);
 	}
-	ft_memset(new_mem, '\0', (*old_size * 2));
-	ft_strlcpy(new_mem, mem, ft_strlen(mem) + 1);
-	*old_size = new_size;
+	ft_memset(ret, '\0', size);
+	if (mem == NULL)
+		return (ret);
+	ft_strlcpy(ret, mem, ft_strlen(mem) + 1);
 	free(mem);
-	return (new_mem);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/16 13:51:53 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:47:31 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,15 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-//char	*put_stock(int fd, char *stock, char *mem);
-char	*put_stock(int fd, char *stock, char *mem, int *err_flag);
-//char *read_put(int fd, char *mem, char *stock);
-char *read_put(int fd, char *mem, char *stock, int *err_flag);
-ssize_t read_buf(int fd, char *buf, char **mem_p, size_t *mem_size);
-int put_buf(char **mem_p, char *buf, char *stock, ssize_t read_size);
+char	*put_stock(int fd, char *stock, int *fd_check);
+char	*read_put(int fd, char *mem, char *stock, int *err_flag);
+ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size);
+int		put_buf(char **mem_p, char *buf, char *stock, ssize_t read_size);
 
 size_t	ft_strlen(const char *str);
 ssize_t	find_char(const char *str, int c);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 void	*ft_memset(void *mem, int c, size_t n);
-char	*strdup_double(char *mem, size_t *old_size);
+char	*alloc_cpy(char *mem, size_t size);
 
 #endif
