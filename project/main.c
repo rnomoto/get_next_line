@@ -89,7 +89,7 @@ int main(void)
     printf("---------------\n");
     free (line);
 
-    system("leaks a.out");
+    //system("leaks a.out");
 
     close(fd);
     return 0;
