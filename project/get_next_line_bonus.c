@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/21 17:08:29 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:37:41 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ char *get_next_line(int fd)
 	stock_list *cur = list;
     char *mem;
     char *ret;
+	int is_new = 0;
 
 	while (cur != NULL && cur->fd_check != fd)
 		cur = cur->next;
@@ -134,6 +135,7 @@ char *get_next_line(int fd)
 		cur = (stock_list *)malloc(sizeof(stock_list)); //null ok
 		if (cur == NULL)
 			return (NULL);
+		is_new = 1;
 		cur->fd_check = fd;
 		cur->err_flag = 0;
 		cur->stock = alloc_cpy(NULL, BUFFER_SIZE + 1); //null ok
@@ -151,22 +153,10 @@ char *get_next_line(int fd)
 		if (mem == NULL)
 			return NULL;
 	}
-	if (mem[0] == '\0')
-	{
-		free(mem);
-		// free(cur->stock);
-		// free(cur);
-		// while(list)
-		// {
-		// 	stock_list *next = list->next;
-		// 	free(list->stock);
-		// 	free(list);
-		// 	list = next;
-		// }
-		return NULL;
-	}
 	ret = alloc_cpy(mem, ft_strlen(mem) + 1); //null ok
 	if (ret == NULL)
 		return NULL;
 	return (ret);
 }
+
+//err_flag ??
