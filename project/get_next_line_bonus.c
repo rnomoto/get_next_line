@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/21 16:21:40 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:08:29 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,11 @@ char	*read_put(int fd, char *mem, stock_list *list)
 	if (read_size == 0 || put_check == 0)
 	{
 		if (buf[0] == '\0')
+		{
 			ft_memset(list->stock, '\0', (BUFFER_SIZE + 1));
+			// free(list->stock);
+			// free(list);
+		}
 		return (free(buf), mem);
 	}
 	list->err_flag = 1;
@@ -146,6 +150,20 @@ char *get_next_line(int fd)
 		mem = read_put(fd, mem, cur); //should define tmp to free
 		if (mem == NULL)
 			return NULL;
+	}
+	if (mem[0] == '\0')
+	{
+		free(mem);
+		// free(cur->stock);
+		// free(cur);
+		// while(list)
+		// {
+		// 	stock_list *next = list->next;
+		// 	free(list->stock);
+		// 	free(list);
+		// 	list = next;
+		// }
+		return NULL;
 	}
 	ret = alloc_cpy(mem, ft_strlen(mem) + 1); //null ok
 	if (ret == NULL)
