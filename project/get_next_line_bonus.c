@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/21 17:37:41 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:44:34 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,7 @@ char	*read_put(int fd, char *mem, stock_list *list)
 	if (read_size == 0 || put_check == 0)
 	{
 		if (buf[0] == '\0')
-		{
 			ft_memset(list->stock, '\0', (BUFFER_SIZE + 1));
-			// free(list->stock);
-			// free(list);
-		}
 		return (free(buf), mem);
 	}
 	list->err_flag = 1;
@@ -126,7 +122,6 @@ char *get_next_line(int fd)
 	stock_list *cur = list;
     char *mem;
     char *ret;
-	int is_new = 0;
 
 	while (cur != NULL && cur->fd_check != fd)
 		cur = cur->next;
@@ -135,7 +130,6 @@ char *get_next_line(int fd)
 		cur = (stock_list *)malloc(sizeof(stock_list)); //null ok
 		if (cur == NULL)
 			return (NULL);
-		is_new = 1;
 		cur->fd_check = fd;
 		cur->err_flag = 0;
 		cur->stock = alloc_cpy(NULL, BUFFER_SIZE + 1); //null ok
