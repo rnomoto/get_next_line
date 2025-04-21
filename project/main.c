@@ -22,7 +22,7 @@
 
 int main(void)
 {
-    int fd = open("input/hello.txt", O_RDONLY);
+    int fd = open("input/single_char.txt", O_RDONLY);
     //fd = 0;
     char *line = get_next_line(fd);
     printf("%s", line);
@@ -89,7 +89,7 @@ int main(void)
     printf("---------------\n");
     free (line);
 
-    //system("leaks a.out");
+    system("leaks a.out");
 
     close(fd);
     return 0;

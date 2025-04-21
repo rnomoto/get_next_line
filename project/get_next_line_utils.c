@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:06 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/18 13:09:18 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 14:31:52 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*alloc_cpy(char *mem, size_t size)
 {
 	char	*ret;
 
-	ret = (char *)malloc(sizeof(char) * size);
+	ret = (char *)malloc(sizeof(char) * size); //null ok
 	if (ret == NULL)
 	{
 		free(mem);

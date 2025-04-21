@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/18 14:49:41 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 14:48:22 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*put_stock(int fd, char *stock, int *fd_check)
 	char	*cp;
 	char	*mem;
 
-	cp = (char *)malloc(sizeof(char) * ft_strlen(stock) + 1);
+	cp = (char *)malloc(sizeof(char) * ft_strlen(stock) + 1); //null ok
 	if (cp == NULL)
 		return (NULL);
 	ft_strlcpy(cp, stock, ft_strlen(stock) + 1);
@@ -47,7 +47,7 @@ ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size)
 	size_t	new_size;
 	char	*tmp;
 
-	read_size = read(fd, buf, BUFFER_SIZE);
+	read_size = read(fd, buf, BUFFER_SIZE); //-1 ok
 	if (read_size == 0 && (buf[0] != '\0' || *mem_p[0] != '\0'))
 		return (0);
 	else if (read_size <= 0)
@@ -56,9 +56,9 @@ ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size)
 	{
 		tmp = *mem_p;
 		new_size = (*mem_size * 2) + BUFFER_SIZE;
-		*mem_p = (char *)malloc(sizeof(char) * new_size);
+		*mem_p = (char *)malloc(sizeof(char) * new_size); //null ok
 		if (*mem_p == NULL)
-			return (-1);
+			return (free(tmp), -1);
 		*mem_size = new_size;
 		ft_memset(*mem_p, '\0', *mem_size);
 		ft_strlcpy(*mem_p, tmp, ft_strlen(tmp) + 1);
@@ -97,14 +97,14 @@ char	*read_put(int fd, char *mem, char *stock, int *err_flag)
 	size_t	mem_size;
 	int		put_check;
 
-	buf = alloc_cpy(NULL, BUFFER_SIZE + 1);
+	buf = alloc_cpy(NULL, BUFFER_SIZE + 1); //null ok
 	if (buf == NULL)
 		return (free(mem), NULL);
 	mem_size = ft_strlen(stock) + 1;
 	while (1)
 	{
-		read_size = read_buf(fd, buf, &mem, &mem_size);
-		put_check = put_buf(&mem, buf, stock, read_size);
+		read_size = read_buf(fd, buf, &mem, &mem_size); //-1 ok
+		put_check = put_buf(&mem, buf, stock, read_size); //-1 ok
 		if (put_check <= 0)
 			break ;
 	}
@@ -132,7 +132,7 @@ char	*get_next_line(int fd)
 		fd_check = -2;
 		err_flag = 0;
 	}
-	mem = put_stock(fd, stock, &fd_check);
+	mem = put_stock(fd, stock, &fd_check); //null ok
 	if (mem == NULL)
 		return (NULL);
 	else if (find_char(mem, '\n') == -1)
@@ -141,8 +141,8 @@ char	*get_next_line(int fd)
 		if (mem == NULL)
 			return (NULL);
 	}
-	ret = alloc_cpy(mem, ft_strlen(mem) + 1);
+	ret = alloc_cpy(mem, ft_strlen(mem) + 1); //null ok
 	if (ret == NULL)
-		return (NULL);
+		return NULL;
 	return (ret);
 }

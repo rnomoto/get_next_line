@@ -6,12 +6,11 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:02:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/18 15:33:11 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 15:40:04 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
 
 size_t	ft_strlen(const char *str)
 {
@@ -79,7 +78,7 @@ char	*alloc_cpy(char *mem, size_t size)
 {
 	char	*ret;
 
-	ret = (char *)malloc(sizeof(char) * size);
+	ret = (char *)malloc(sizeof(char) * size); //null ok
 	if (ret == NULL)
 	{
 		free(mem);

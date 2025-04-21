@@ -6,12 +6,12 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/18 16:59:29 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:11:27 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
+#include <stdio.h> //debug
 
 char *put_stock_bonus(int fd, stock_list *list)
 {
@@ -19,17 +19,14 @@ char *put_stock_bonus(int fd, stock_list *list)
 	char *mem;
 	ssize_t nl_pos;
 
-	printf("stock1: \"%s\"\n", list->stock);
-	cp = (char *)malloc(sizeof(char) * ft_strlen(list->stock) + 1);
+	cp = (char *)malloc(sizeof(char) * ft_strlen(list->stock) + 1); //null ok
 	if (cp == NULL)
 		return NULL;
 	ft_strlcpy(cp, list->stock, ft_strlen(list->stock) + 1);
-	mem = alloc_cpy(NULL, ft_strlen(list->stock) + 1);
+	mem = alloc_cpy(NULL, ft_strlen(list->stock) + 1); //null ok
 	if (mem == NULL)
 		return (free(cp), NULL);
 	nl_pos = find_char(list->stock, '\n');
-	//printf("stock: \"%s\"\n", list->stock);
-	printf("nl_pos: %zd\n", nl_pos);
 	if (nl_pos != -1)
 	{
 		ft_strlcpy(mem, cp, (nl_pos + 1) + 1);
@@ -48,7 +45,7 @@ ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size)
 	size_t	new_size;
 	char	*tmp;
 
-	read_size = read(fd, buf, BUFFER_SIZE);
+	read_size = read(fd, buf, BUFFER_SIZE); //-1 ok
 	if (read_size == 0 && (buf[0] != '\0' || *mem_p[0] != '\0'))
 		return (0);
 	else if (read_size <= 0)
@@ -57,9 +54,9 @@ ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size)
 	{
 		tmp = *mem_p;
 		new_size = (*mem_size * 2) + BUFFER_SIZE;
-		*mem_p = (char *)malloc(sizeof(char) * new_size);
+		*mem_p = (char *)malloc(sizeof(char) * new_size); //null ok
 		if (*mem_p == NULL)
-			return (-1);
+			return (free(tmp), -1);
 		*mem_size = new_size;
 		ft_memset(*mem_p, '\0', *mem_size);
 		ft_strlcpy(*mem_p, tmp, ft_strlen(tmp) + 1);
@@ -87,7 +84,6 @@ int	put_buf(char **mem_p, char *buf, stock_list *list, ssize_t read_size)
 	{
 		ft_strlcpy(*mem_p + ft_strlen(*mem_p), buf, (nl_pos + 1) + 1);
 		ft_strlcpy(list->stock, buf + nl_pos + 1, read_size - nl_pos);
-		printf("stock2: \"%s\"\n", list->stock);
 	}
 	return (0);
 }
@@ -99,15 +95,14 @@ char	*read_put(int fd, char *mem, stock_list *list)
 	size_t	mem_size;
 	int		put_check;
 
-	//printf("stock1: \"%s\"\n", list->stock);
-	buf = alloc_cpy(NULL, BUFFER_SIZE + 1);
+	buf = alloc_cpy(NULL, BUFFER_SIZE + 1); //null ok
 	if (buf == NULL)
 		return (free(mem), NULL);
 	mem_size = ft_strlen(list->stock) + 1;
 	while (1)
 	{
-		read_size = read_buf(fd, buf, &mem, &mem_size);
-		put_check = put_buf(&mem, buf, list, read_size);
+		read_size = read_buf(fd, buf, &mem, &mem_size); //-1 ok
+		put_check = put_buf(&mem, buf, list, read_size); //-1 ok
 		if (put_check <= 0)
 			break ;
 	}
@@ -121,21 +116,6 @@ char	*read_put(int fd, char *mem, stock_list *list)
 	return (free(mem), free(buf), NULL);
 }
 
-int	ft_lstsize(stock_list *lst)
-{
-	int	count;
-
-	count = 1;
-	if (lst == NULL)
-		return (0);
-	while (lst->next != NULL)
-	{
-		lst = lst->next;
-		count++;
-	}
-	return (count);
-}
-
 char *get_next_line(int fd)
 {
     static stock_list *list = NULL;
@@ -143,41 +123,32 @@ char *get_next_line(int fd)
     char *mem;
     char *ret;
 
-	printf("size: %d\n", ft_lstsize(list));
-	while (list != NULL)
-	{
-		if (cur->fd_check == fd)
-			break;
-		printf("      fd: %d\n", fd);
-		printf("fd_check: %d\n", cur->fd_check);
+	while (cur != NULL && cur->fd_check != fd)
 		cur = cur->next;
-	}
 	if (cur == NULL)
 	{
-		cur = (stock_list *)malloc(sizeof(list));
+		cur = (stock_list *)malloc(sizeof(stock_list)); //null ok
 		if (cur == NULL)
 			return (NULL);
 		cur->fd_check = fd;
 		cur->err_flag = 0;
-		cur->stock = alloc_cpy(NULL, BUFFER_SIZE + 1);
+		cur->stock = alloc_cpy(NULL, BUFFER_SIZE + 1); //null ok
 		if (cur->stock == NULL)
-			return NULL;
+			return (free(cur), NULL);
+		cur->next = list;
+		list = cur;
 	}
-    mem = put_stock_bonus(fd, cur);
+    mem = put_stock_bonus(fd, cur); //null ok
 	if (mem == NULL)
 		return NULL;
 	if (find_char(mem, '\n') == -1)
 	{
-		printf("read step in\n");
-		//printf("%s\n", list->stock);
-		//printf("step in.\n");
-		mem = read_put(fd, mem, cur);
+		mem = read_put(fd, mem, cur); //should define tmp to free
 		if (mem == NULL)
-			return (NULL);
+			return NULL;
 	}
-	ret = alloc_cpy(mem, ft_strlen(mem) + 1);
+	ret = alloc_cpy(mem, ft_strlen(mem) + 1); //null ok
 	if (ret == NULL)
-		return (NULL);
-	//list = head;
+		return NULL;
 	return (ret);
 }
