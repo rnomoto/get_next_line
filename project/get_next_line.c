@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 16:09:45 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 16:11:22 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ char *get_next_line(int fd)
     ret = alloc_cpy(mem, ft_strlen(mem) + 1);
     if (ret == NULL)
         return NULL;
+    free(mem);
     return ret;
 }
