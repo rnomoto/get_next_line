@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 15:46:42 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 16:09:45 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,20 @@ int	get_c(int fd)
 		cur->read_size = read(fd, cur->buf, BUFFER_SIZE); //-1 ok
         if (cur->read_size == -1)
         {
-            //free_list(&list, fd);
+            //free_list(&cur, fd);
             return -2;
+            //return (cur->read_size == 0 ? EOF : -2);
         }
 		cur->buf_p = cur->buf;
 	}
 	cur->read_size--;
 	if (cur->read_size < 0)
     {
-        //free_list(&list, fd);
+        //free_list(&cur, fd);
         return (EOF);
     }
+    // else if (cur->read_size != 0)
+    //     cur->buf_p++;
     return (*cur->buf_p++);
 }
 
@@ -64,6 +67,7 @@ int put_c(char **mem_p, size_t *mem_size, char c)
         *mem_p = alloc_cpy(*mem_p, *mem_size * 2);
         if (*mem_p == NULL)
             return -1;
+        *mem_size *= 2;
     }
     (*mem_p)[ft_strlen(*mem_p)] = c;
     return 0;
@@ -81,7 +85,7 @@ char *get_next_line(int fd)
     mem_size = 0;
     while(1)
     {
-        c = ft_getchar(fd);
+        c = get_c(fd);
         if (c == -2)
         {
             free(mem);
@@ -89,7 +93,7 @@ char *get_next_line(int fd)
         }
         else if (c == EOF)
             break;
-        put_check = ft_putc(&mem, &mem_size, c);
+        put_check = put_c(&mem, &mem_size, c);
         if (put_check == -1)
         {
             free(mem);
