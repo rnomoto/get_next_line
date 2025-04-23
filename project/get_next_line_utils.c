@@ -6,12 +6,11 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:06 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/21 14:31:52 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 15:45:19 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 size_t	ft_strlen(const char *str)
 {
@@ -23,20 +22,21 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-ssize_t	find_char(const char *str, int c)
+void	*ft_memset(void *mem, int c, size_t n)
 {
-	ssize_t	i;
+	size_t			i;
+	unsigned char	*mem_cast;
+	unsigned char	c_cast;
 
 	i = 0;
-	while (str[i] != '\0')
+	mem_cast = (unsigned char *)mem;
+	c_cast = (unsigned char)c;
+	while (i < n)
 	{
-		if (str[i] == c)
-			return (i);
+		mem_cast[i] = c_cast;
 		i++;
 	}
-	if (str[i] == c)
-		return (i);
-	return (-1);
+	return (mem_cast);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
@@ -58,23 +58,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (check);
 }
 
-void	*ft_memset(void *mem, int c, size_t n)
-{
-	size_t			i;
-	unsigned char	*mem_cast;
-	unsigned char	c_cast;
-
-	i = 0;
-	mem_cast = (unsigned char *)mem;
-	c_cast = (unsigned char)c;
-	while (i < n)
-	{
-		mem_cast[i] = c_cast;
-		i++;
-	}
-	return (mem_cast);
-}
-
 char	*alloc_cpy(char *mem, size_t size)
 {
 	char	*ret;
@@ -91,4 +74,28 @@ char	*alloc_cpy(char *mem, size_t size)
 	ft_strlcpy(ret, mem, ft_strlen(mem) + 1);
 	free(mem);
 	return (ret);
+}
+
+void free_list(t_list **list, int fd)
+{
+	t_list *cur;
+	t_list *prev;
+
+	cur = *list;
+	prev = NULL;
+	while (cur != NULL)
+	{
+		if (cur->fd_check == fd)
+		{
+			if (prev != NULL)
+				prev->next = cur->next;
+			else
+				*list = cur->next;
+			free(cur->buf_p);
+			free(cur);
+			return;
+		}
+		prev = cur;
+		cur = cur->next;
+	}
 }

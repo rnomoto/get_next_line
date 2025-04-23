@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/18 13:47:31 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 15:45:20 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,26 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
+
+typedef struct s_list
+{
+    int fd_check;
+    char buf[BUFFER_SIZE];
+    char *buf_p;
+    ssize_t read_size;
+    struct s_list *next;
+} t_list;
 
 char	*get_next_line(int fd);
-char	*put_stock(int fd, char *stock, int *fd_check);
-char	*read_put(int fd, char *mem, char *stock, int *err_flag);
-ssize_t	read_buf(int fd, char *buf, char **mem_p, size_t *mem_size);
-int		put_buf(char **mem_p, char *buf, char *stock, ssize_t read_size);
+int	get_c(int fd);
+int put_c(char **mem, size_t *mem_size, char c);
 
 size_t	ft_strlen(const char *str);
-ssize_t	find_char(const char *str, int c);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 void	*ft_memset(void *mem, int c, size_t n);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 char	*alloc_cpy(char *mem, size_t size);
+
+void free_list(t_list **list, int fd);
 
 #endif
