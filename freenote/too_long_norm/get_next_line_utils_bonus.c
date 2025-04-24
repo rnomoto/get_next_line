@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:02:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 18:01:50 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 18:09:37 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,27 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (check);
 }
 
+ssize_t	find_char(const char *str, int c)
+{
+	ssize_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	if (str[i] == c)
+		return (i);
+	return (-1);
+}
+
 char	*alloc_cpy(char *mem, size_t size)
 {
 	char	*ret;
 
-	ret = (char *)malloc(sizeof(char) * size); // null ok
+	ret = (char *)malloc(sizeof(char) * size); //null ok
 	if (ret == NULL)
 	{
 		free(mem);
@@ -74,28 +90,4 @@ char	*alloc_cpy(char *mem, size_t size)
 	ft_strlcpy(ret, mem, ft_strlen(mem) + 1);
 	free(mem);
 	return (ret);
-}
-
-void	free_list(t_list **list, int fd)
-{
-	t_list	*cur;
-	t_list	*prev;
-
-	cur = *list;
-	prev = NULL;
-	while (cur != NULL)
-	{
-		if (cur->fd_check == fd)
-		{
-			if (prev != NULL)
-				prev->next = cur->next;
-			else
-				*list = cur->next;
-			// free(cur->buf_p);
-			free(cur);
-			return ;
-		}
-		prev = cur;
-		cur = cur->next;
-	}
 }

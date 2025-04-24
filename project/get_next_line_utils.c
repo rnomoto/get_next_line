@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:06 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 15:45:19 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/23 19:36:57 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,11 @@ char	*alloc_cpy(char *mem, size_t size)
 {
 	char	*ret;
 
-	ret = (char *)malloc(sizeof(char) * size); //null ok
+	ret = (char *)malloc(sizeof(char) * size); // null ok
 	if (ret == NULL)
 	{
-		free(mem);
+		if (mem != NULL)
+			free(mem);
 		return (NULL);
 	}
 	ft_memset(ret, '\0', size);
@@ -76,10 +77,10 @@ char	*alloc_cpy(char *mem, size_t size)
 	return (ret);
 }
 
-void free_list(t_list **list, int fd)
+void	free_list(t_list **list, int fd)
 {
-	t_list *cur;
-	t_list *prev;
+	t_list	*cur;
+	t_list	*prev;
 
 	cur = *list;
 	prev = NULL;
@@ -91,9 +92,8 @@ void free_list(t_list **list, int fd)
 				prev->next = cur->next;
 			else
 				*list = cur->next;
-			free(cur->buf_p);
 			free(cur);
-			return;
+			return ;
 		}
 		prev = cur;
 		cur = cur->next;
