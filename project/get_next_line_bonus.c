@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/24 13:01:21 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 13:56:12 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,14 @@ int	get_c(int fd, t_list **list)
 		}
 		cur->buf_p = cur->buf;
 	}
-	cur->read_size--;
-	if (cur->read_size < 0)
+	if (--cur->read_size < 0)
 	{
 		free_list(list, fd);
 		return (EOF);
 	}
 	c = *cur->buf_p++;
+	if (cur->read_size <= 0 && fd == 0)
+		free_list(list, fd);
 	return (c);
 }
 
@@ -119,9 +120,5 @@ char	*get_next_line(int fd)
 	mem = alloc_cpy(mem, ft_strlen(mem) + 1, &list, fd);
 	if (mem == NULL)
 		return (NULL);
-	if (fd == 0)
-	{
-		free_list(&list, fd);
-	}
 	return (mem);
 }

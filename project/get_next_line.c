@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:20 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/24 13:15:01 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 13:54:49 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int	get_c(int fd, t_list **list)
 		}
 		cur->buf_p = cur->buf;
 	}
-	cur->read_size--;
-	if (cur->read_size < 0)
+	if (--cur->read_size < 0)
 	{
 		free_list(list, fd);
 		return (EOF);
