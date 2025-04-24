@@ -6,38 +6,47 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 18:04:46 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:19:41 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int	get_c(int fd)
+t_list	*find_cur(int fd, t_list **list)
 {
-	static t_list	*list = NULL;
-	t_list			*cur;
-	char			c;
+	t_list	*cur;
 
-	cur = list;
+	cur = *list;
 	while (cur != NULL && cur->fd_check != fd)
 		cur = cur->next;
 	if (cur == NULL)
 	{
 		cur = (t_list *)malloc(sizeof(t_list)); // null ok
 		if (cur == NULL)
-			return (-2);
+			return (NULL);
 		cur->fd_check = fd;
 		cur->buf_p = cur->buf;
 		cur->read_size = 0;
-		cur->next = list;
-		list = cur;
+		cur->next = *list;
+		*list = cur;
 	}
+	return (cur);
+}
+
+int	get_c(int fd, t_list **list)
+{
+	t_list	*cur;
+	char	c;
+
+	cur = find_cur(fd, list);
+	if (cur == NULL)
+		return (-2);
 	if (cur->read_size == 0)
 	{
 		cur->read_size = read(fd, cur->buf, BUFFER_SIZE); //-1 ok
 		if (cur->read_size == -1)
 		{
-			free_list(&list, fd);
+			free_list(list, fd);
 			return (-2);
 		}
 		cur->buf_p = cur->buf;
@@ -45,70 +54,70 @@ int	get_c(int fd)
 	cur->read_size--;
 	if (cur->read_size < 0)
 	{
-		free_list(&list, fd);
+		free_list(list, fd);
 		return (EOF);
 	}
 	c = *cur->buf_p++;
-	if (c == '\n' && cur->read_size == 0)
-		free_list(&list, fd);
 	return (c);
 }
 
-int	put_c(char **mem_p, size_t *mem_size, char c)
+int	put_c(t_mem *m_list, char c, t_list **list, int fd)
 {
-	if (*mem_p == NULL)
+	if (m_list->mem == NULL)
 	{
-		*mem_p = alloc_cpy(NULL, BUFFER_SIZE + 1);
-		if (*mem_p == NULL)
+		m_list->mem = alloc_cpy(NULL, BUFFER_SIZE + 1, list, fd);
+		if (m_list->mem == NULL)
 			return (-1);
-		*mem_size = BUFFER_SIZE + 1;
+		m_list->size = BUFFER_SIZE + 1;
 	}
-	if (ft_strlen(*mem_p) + 1 >= *mem_size)
+	if (ft_strlen(m_list->mem) + 1 >= m_list->size)
 	{
-		*mem_p = alloc_cpy(*mem_p, *mem_size * 2);
-		if (*mem_p == NULL)
+		m_list->mem = alloc_cpy(m_list->mem, m_list->size * 2, list, fd);
+		if (m_list->mem == NULL)
 			return (-1);
-		*mem_size *= 2;
+		m_list->size *= 2;
 	}
-	(*mem_p)[ft_strlen(*mem_p)] = c;
+	(m_list->mem)[ft_strlen(m_list->mem)] = c;
 	return (0);
+}
+
+char	*get_put(int fd, t_list **list)
+{
+	char	c;
+	int		put_check;
+	t_mem	m_list;
+
+	m_list.mem = NULL;
+	m_list.size = 0;
+	while (1)
+	{
+		c = get_c(fd, list);
+		if (c == -2)
+		{
+			free(m_list.mem);
+			return (NULL);
+		}
+		else if (c == EOF) // free?
+			break ;
+		put_check = put_c(&m_list, c, list, fd);
+		if (put_check == -1)
+			return (NULL);
+		else if (c == '\n')
+			break ;
+	}
+	return (m_list.mem);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*mem;
-	char	*ret;
-	size_t	mem_size;
-	char	c;
-	int		put_check;
+	char			*mem;
+	static t_list	*list = NULL;
 
-	mem = NULL;
-	mem_size = 0;
-	while (1)
-	{
-		c = get_c(fd);
-		if (c == -2)
-		{
-			free(mem);
-			return (NULL);
-		}
-		else if (c == EOF)
-			break ;
-		put_check = put_c(&mem, &mem_size, c);
-		if (put_check == -1)
-		{
-			free(mem);
-			return (NULL);
-		}
-		else if (c == '\n')
-			break ;
-	}
+	mem = get_put(fd, &list);
 	if (mem == NULL)
-	{
 		return (NULL);
-	}
-	ret = alloc_cpy(mem, ft_strlen(mem) + 1);
-	if (ret == NULL)
+	mem = alloc_cpy(mem, ft_strlen(mem) + 1, &list, fd);
+	if (mem == NULL)
 		return (NULL);
-	return (ret);
+	return (mem);
 }
