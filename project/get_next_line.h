@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:30:34 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 21:40:50 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 11:15:52 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,22 @@ typedef struct s_list
 }					t_list;
 
 char				*get_next_line(int fd);
-int					get_c(int fd);
-//int get_c(int fd, t_list **list);
-t_list *get_fd_node(int fd, t_list **head);
-int	put_c(char **mem_p, size_t *mem_size, char c);
+
+//int get_c(int fd);
+int get_c(int fd, t_list **list);
+
+int	put_c(char **mem_p, size_t *mem_size, char c, t_list **list, int fd);
+//int	put_c(char **mem_p, size_t *mem_size, char c);
+
+//char *get_put(int fd, t_list **list);
 char *get_put(int fd, t_list **list);
 
 size_t				ft_strlen(const char *str);
 void				*ft_memset(void *mem, int c, size_t n);
+
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
-char				*alloc_cpy(char *mem, size_t size);
+//char				*alloc_cpy(char *mem, size_t size);
+char	*alloc_cpy(char *mem, size_t size, t_list **list, int fd);
 
 void				free_list(t_list **list, int fd);
 

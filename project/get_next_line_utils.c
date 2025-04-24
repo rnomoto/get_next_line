@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 11:49:06 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/23 19:36:57 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 11:17:14 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,19 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (check);
 }
 
-char	*alloc_cpy(char *mem, size_t size)
+// char	*alloc_cpy(char *mem, size_t size)
+char	*alloc_cpy(char *mem, size_t size, t_list **list, int fd)
 {
 	char	*ret;
 
-	ret = (char *)malloc(sizeof(char) * size); // null ok
+	//ret = (char *)malloc(sizeof(char) * size);
+	ret = NULL;
 	if (ret == NULL)
 	{
 		if (mem != NULL)
 			free(mem);
+		if (list != NULL)
+			free_list(list, fd);
 		return (NULL);
 	}
 	ft_memset(ret, '\0', size);

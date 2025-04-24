@@ -22,7 +22,7 @@
 
 int main(void)
 {
-    int fd = open("input/single_line.txt", O_RDONLY);
+    int fd = open("input/long_line.txt", O_RDONLY);
     //fd = 0;
     char *line = get_next_line(fd);
     printf("%s", line);
