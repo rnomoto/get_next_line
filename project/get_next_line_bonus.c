@@ -6,7 +6,7 @@
 /*   By: rnomoto <rnomoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:00:44 by rnomoto           #+#    #+#             */
-/*   Updated: 2025/04/24 12:19:41 by rnomoto          ###   ########.fr       */
+/*   Updated: 2025/04/24 13:01:21 by rnomoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_list	*find_cur(int fd, t_list **list)
 		cur = cur->next;
 	if (cur == NULL)
 	{
-		cur = (t_list *)malloc(sizeof(t_list)); // null ok
+		cur = (t_list *)malloc(sizeof(t_list));
 		if (cur == NULL)
 			return (NULL);
 		cur->fd_check = fd;
@@ -43,7 +43,7 @@ int	get_c(int fd, t_list **list)
 		return (-2);
 	if (cur->read_size == 0)
 	{
-		cur->read_size = read(fd, cur->buf, BUFFER_SIZE); //-1 ok
+		cur->read_size = read(fd, cur->buf, BUFFER_SIZE);
 		if (cur->read_size == -1)
 		{
 			free_list(list, fd);
@@ -97,7 +97,7 @@ char	*get_put(int fd, t_list **list)
 			free(m_list.mem);
 			return (NULL);
 		}
-		else if (c == EOF) // free?
+		else if (c == EOF)
 			break ;
 		put_check = put_c(&m_list, c, list, fd);
 		if (put_check == -1)
@@ -119,5 +119,9 @@ char	*get_next_line(int fd)
 	mem = alloc_cpy(mem, ft_strlen(mem) + 1, &list, fd);
 	if (mem == NULL)
 		return (NULL);
+	if (fd == 0)
+	{
+		free_list(&list, fd);
+	}
 	return (mem);
 }

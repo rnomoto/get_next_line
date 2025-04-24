@@ -20,9 +20,14 @@
 // input/long_line.txt
 // input/long_multiple_line.txt
 
-int main(void)
+int main(int argc, char **argv)
 {
-    int fd = open("input/long_line.txt", O_RDONLY);
+    if (argc != 2)
+    {
+        printf("arg error.\n");
+        return 1;
+    }
+    int fd = open(argv[1], O_RDONLY);
     //fd = 0;
     char *line = get_next_line(fd);
     printf("%s", line);
@@ -89,7 +94,7 @@ int main(void)
     printf("---------------\n");
     free (line);
 
-    system("leaks a.out");
+    //system("leaks a.out");
 
     close(fd);
     return 0;
